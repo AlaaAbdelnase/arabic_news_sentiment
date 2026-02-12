@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentiment Demo</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 24px;
+        background: #111827;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+      }
+      p {
+        margin: 0 0 16px;
+        color: #94a3b8;
+      }
+      textarea {
+        width: 100%;
+        min-height: 140px;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #334155;
+        background: #0b1220;
+        color: #e2e8f0;
+        resize: vertical;
+        font-size: 14px;
+        outline: none;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 12px;
+      }
+      button {
+        background: #38bdf8;
+        color: #0f172a;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .result {
+        margin-top: 16px;
+        padding: 12px;
+        background: #0b1220;
+        border: 1px solid #334155;
+        border-radius: 8px;
+      }
+      code {
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Sentiment Prediction</h1>
+      <p>Enter text and submit to get the predicted sentiment.</p>
+      <textarea id="text" placeholder="Type your text here..."></textarea>
+      <div class="row">
+        <button id="submit">Predict</button>
+        <span id="status"></span>
+      </div>
+      <div class="result" id="result" hidden>
+        <code id="resultText"></code>
+      </div>
+    </div>
+
+    <script>
+      const submitBtn = document.getElementById("submit");
+      const textArea = document.getElementById("text");
+      const statusEl = document.getElementById("status");
+      const resultEl = document.getElementById("result");
+      const resultText = document.getElementById("resultText");
+
+      async function predict() {
+        const text = textArea.value.trim();
+        if (!text) {
+          statusEl.textContent = "Please enter some text.";
+          return;
+        }
+        statusEl.textContent = "Predicting...";
+        submitBtn.disabled = true;
+        resultEl.hidden = true;
+
+        try {
+          const res = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text }),
+          });
+          const data = await res.json();
+          resultText.textContent = JSON.stringify(data, null, 2);
+          resultEl.hidden = false;
+          statusEl.textContent = res.ok ? "Done" : "Error";
+        } catch (err) {
+          statusEl.textContent = "Request failed.";
+        } finally {
+          submitBtn.disabled = false;
+        }
+      }
+
+      submitBtn.addEventListener("click", predict);
+    </script>
+  </body>
+</html>
