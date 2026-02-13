@@ -41,7 +41,7 @@ jobs:
           context: .
           no-cache: true
           push: ${{ github.event_name == 'push' }}
-          tags: ${{ secrets.DOCKER_USERNAME }}/sentiment-deploy:latest,${{ secrets.DOCKER_USERNAME }}/sentiment-deploy:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/sentiment-deploy:latest,${{ secrets.DOCKER_USERNAME }}/sentiment-deploy:latest2,${{ secrets.DOCKER_USERNAME }}/sentiment-deploy:${{ github.sha }}
 
       # Optional: Build and push to GitHub Container Registry
       # - name: Build and push to GHCR
