@@ -9,7 +9,7 @@ app = Flask(__name__)
 SVM_MODEL_PATH = 'models/sentiment_svm_model.pkl'
 LOGREG_MODEL_PATH = 'models/sentiment_logreg_model.pkl'
 RF_MODEL_PATH = 'models/sentiment_rf_model.pkl'
-SCALER_PATH = 'sentiment_e5_scaler_4class.pkl'
+SCALER_PATH = 'sentiment_scaler.pkl'
 EMBEDDING_MODEL_NAME = 'intfloat/multilingual-e5-small'
 # Model weights based on accuracies
 MODEL_WEIGHTS = {
